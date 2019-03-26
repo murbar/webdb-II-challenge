@@ -25,6 +25,22 @@ server.get('/api/zoos', async (req, res) => {
   }
 });
 
+server.get('/api/zoos/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const zoo = await db('zoos')
+      .where({ id })
+      .first();
+    if (!zoo) {
+      res.status(404).json({ error: 'No zoo by that ID.' });
+    } else {
+      res.status(200).json(zoo);
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Cannot get zoo.' });
+  }
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
