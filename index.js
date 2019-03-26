@@ -55,6 +55,22 @@ server.post('/api/zoos', async (req, res) => {
     res.status(500).json({ error: 'Cannot create zoo.' });
   }
 });
+server.delete('/api/zoos/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedCount = await db('zoos')
+      .where({ id })
+      .del();
+    if (!deletedCount) {
+      res.status(404).json({ error: 'No zoo by that ID.' });
+    } else {
+      res.status(204).end();
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Cannot delete zoo.' });
+  }
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
