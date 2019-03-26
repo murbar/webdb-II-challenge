@@ -48,7 +48,6 @@ server.post('/api/zoos', async (req, res) => {
       res.status(400).json({ error: 'A zoo must have a name.' });
     } else {
       const [newZooId] = await db('zoos').insert(newZoo);
-
       res.status(201).json(newZooId);
     }
   } catch (error) {
@@ -74,8 +73,8 @@ server.put('/api/zoos/:id', async (req, res) => {
 });
 
 server.delete('/api/zoos/:id', async (req, res) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     const deletedCount = await db('zoos')
       .where({ id })
       .del();
