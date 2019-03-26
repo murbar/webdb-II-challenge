@@ -55,6 +55,24 @@ server.post('/api/zoos', async (req, res) => {
     res.status(500).json({ error: 'Cannot create zoo.' });
   }
 });
+
+server.put('/api/zoos/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { body: zooUpdates } = req;
+    const updatedCount = await db('zoos')
+      .where({ id })
+      .update(zooUpdates);
+    if (!updatedCount) {
+      res.status(404).json({ error: 'No zoo by that ID.' });
+    } else {
+      res.status(204).end();
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Cannot update zoo.' });
+  }
+});
+
 server.delete('/api/zoos/:id', async (req, res) => {
   const { id } = req.params;
   try {
